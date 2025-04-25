@@ -1,6 +1,5 @@
-import React from 'react'
-import banner from "../assets/banner.jpg"
-import bannerMobile from "../assets/banner-mobile.jpg"
+import banner2 from "../assets/banner2.png"
+import bannerMobile from "../assets/banner1.png"
 import { useSelector } from 'react-redux'
 import CategoryWiseProductDisplay from '../components/CategoryWiseProductDisplay'
 import { useNavigate } from 'react-router-dom'
@@ -20,9 +19,9 @@ const Home = () => {
   return (
     <section className=' bg-white'>
       <div className=' container mx-auto'>
-        <div className={`w-full h-full min-h-48 bg-blue-100 rounded ${!banner && "animate-pulse my-2" } `}>
-          <img src={banner} alt="banner" className='w-full h-full lg:block hidden'/>
-          <img src={bannerMobile} alt="banner-mobile"  className=' w-full h-full lg:hidden'/>
+        <div className={`w-full h-full min-h-48 bg-blue-100 rounded ${!banner2 && "animate-pulse my-2" } `}>
+          <img src={banner2} alt="banner" className='w-full h-[500px] lg:block hidden'/>
+          <img src={bannerMobile} alt="banner-mobile"  className=' w-full h-full lg:hidden '/>
         </div>
 
         <div className='container mx-auto px-4 my-2 grid grid-cols-5 md:grid-cols-8 lg:grid-cols-10  gap-2'>

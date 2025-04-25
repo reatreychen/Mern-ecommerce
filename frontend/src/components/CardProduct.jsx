@@ -5,86 +5,63 @@ import AddToCartButton from "./AddToCartButton.jsx";
 
 const CardProduct = ({ data }) => {
   const url = `/product/${valideURLConvert(data.name)}-${data._id}`;
-  // const {fetchCartItems} = useGlobalContext()
 
-  // const handleAddToCart = async (e) => {
-  //   e.preventDefault();
-  //   e.stopPropagation();
-  //   try {
-  //     setLoading(true);
-  //     const response = await Axios({
-  //       ...summaryApi.addToCart,
-  //       data: {
-  //         productId: data?._id
-  //       }
-  //     })
-
-  //     const responseData = response.data
-  //     if (responseData.success) {
-  //       toast.success(responseData.message)
-  //       if (fetchCartItems) {
-  //         fetchCartItems()
-  //       }
-  //     }
-  //   }catch(err) {
-  //     console.log(err);
-  //     toast.error(
-  //       err?.response?.data?.message
-  //   )
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
   return (
-    <Link
-      to={url}
-      className=" shadow-md border py-2 lg:p-4 grid gap-2 lg:gap-3 min-w-36 lg:min-w-52 rounded cursor-pointer bg-white"
-    >
-      <div className=" min-h-20 w-full max-h-24 rounded overflow-hidden">
-        <img
-          src={data.image[0]}
-          alt={data.name}
-          className=" w-full h-full object-scale-down"
-        />
-      </div>
-      <div className=" flex items-center gap-1">
-        <div className="rounded text-xs w-fit p-[1px] px-2 text-green-600 bg-green-200">
+      <Link
+          to={url}
+          className="relative group bg-white border shadow-md rounded-2xl overflow-hidden cursor-pointer transition-all hover:shadow-lg min-w-36 lg:min-w-56 grid gap-2 lg:gap-3 p-3 lg:p-4"
+      >
+        {/* Hover overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-blue-100 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
+
+        {/* Product Image */}
+        <div className="relative z-10 h-24 w-full rounded-xl overflow-hidden">
+          <img
+              src={data.image[0]}
+              alt={data.name}
+              className="w-full h-full object-scale-down group-hover:object-cover group-hover:scale-110 transition-all duration-500 ease-in-out"
+          />
+        </div>
+
+        {/* Time & Discount Tag */}
+        <div className="relative z-10 flex items-center gap-2 text-xs">
+        <span className="bg-green-200 text-green-700 rounded-full px-2 py-[2px] font-medium">
           10 min
-        </div>
-        <div>
+        </span>
           {Boolean(data.discount) && (
-            <p
-              className="text-green-700 bg-green-200
-             px-2 w-fit text-xs rounded-full"
-            >
-              {data.discount}% discount
-            </p>
+              <span className="bg-green-100 text-green-600 px-2 py-[2px] rounded-full font-medium">
+            {data.discount}% discount
+          </span>
           )}
         </div>
-      </div>
 
-      <div className="px-2 lg:px-0 font-medium text-ellipsis text-sm lg:text-base line-clamp-2">
-        {data.name}
-      </div>
-
-      <div className="w-fit gap-1 px-2 lg:px-0 text-sm font-semibold  lg:text-base">
-        {data.unit} Unit
-      </div>
-
-      <div className="px-2 lg:px-0 flex items-center justify-between gap-1 lg:gap-3 text-sm lg:text-base">
-        <div className="flex items-center gap-1">
-          <div className="font-semibold">${data.price}</div>
+        {/* Product Name */}
+        <div className="relative z-10 px-1 font-medium text-sm lg:text-base line-clamp-2 group-hover:text-blue-700 transition-colors">
+          {data.name}
         </div>
 
-        <div>
-          {data.stock == 0 ? (
-            <p>Out of stock</p>
-          ) : (
-            <AddToCartButton data={data} />
-          )}
+        {/* Unit Info */}
+        <div className="relative z-10 px-1 text-sm font-semibold text-gray-700">
+          {data.unit} Unit
         </div>
-      </div>
-    </Link>
+
+        {/* Price & Add to Cart */}
+        <div className="relative z-10 px-1 flex items-center justify-between text-sm lg:text-base">
+          <div className="font-semibold text-gray-800 group-hover:text-blue-700 transition-colors">
+            ${data.price}
+          </div>
+          <div className="transform group-hover:scale-105 transition-transform">
+            {data.stock === 0 ? (
+                <span className="text-red-500 font-medium">Out of stock</span>
+            ) : (
+                <AddToCartButton data={data} />
+            )}
+          </div>
+        </div>
+
+        {/* Border Animation */}
+        <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-400 rounded-2xl transition-colors duration-300"></div>
+      </Link>
   );
 };
 
