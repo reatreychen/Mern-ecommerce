@@ -1,6 +1,6 @@
 {
     "version" : 2,
-    "name" : "Blinkit",
+    "name" : "reatrey",
     "builds" : [
         {
             "src" : "./index.js",
