@@ -12,11 +12,9 @@ const Router = require("./routes/api")
 dotenv.config()
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"]
-})); 
+    credentials : true,
+    origin : process.env.FRONTEND_URL
+}))
 
 // middleware
 app.use(express.json());
@@ -26,6 +24,8 @@ app.use(morgen());
 app.use(helmet({
     crossOriginResourcePolicy: false
 }))
+
+
 // routers
 app.use('/api' , Router)
 
@@ -33,7 +33,12 @@ connectDB(()=>{
     console.log("db connection")
 })
 const port = 3001;
-
+app.get("/",(request,response)=>{
+    ///server to client
+    response.json({
+        message : "Server is running " + port
+    })
+})
 app.listen(port, () => {
     console.log("Server running on port " + port);
 });
