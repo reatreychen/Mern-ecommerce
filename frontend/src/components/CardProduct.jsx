@@ -1,11 +1,9 @@
 import { Link } from "react-router-dom";
 import { valideURLConvert } from "../utils/validURLConvert.js";
-import { useState } from "react";
 import AddToCartButton from "./AddToCartButton.jsx";
 
 const CardProduct = ({ data }) => {
   const url = `/product/${valideURLConvert(data.name)}-${data._id}`;
-
   return (
       <Link
           to={url}

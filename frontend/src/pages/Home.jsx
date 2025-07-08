@@ -7,6 +7,7 @@ import { valideURLConvert } from '../utils/validURLConvert'
 const Home = () => {
     const loadingCategory = useSelector((state)=> state.product.loadingCategory)
     const categoryData = useSelector((category)=> category.product.allCategory)
+    console.log("category data", categoryData)
     const subCategoryData = useSelector((category)=> category.product.allSubCategory)
     const navigate = useNavigate()
     const handleRedirectProductListpage = (id, cat) => {

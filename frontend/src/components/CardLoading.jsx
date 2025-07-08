@@ -1,5 +1,3 @@
-import React from 'react'
-
 const CardLoading = () => {
     return (
         <div className='border py-2 lg:p-4 grid gap-1 lg:gap-3 min-w-36 lg:min-w-50 rounded cursor-pointer bg-white animate-pulse'>

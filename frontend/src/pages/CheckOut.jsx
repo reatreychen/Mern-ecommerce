@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useGlobalContext } from '../provider/GlobalProvider'
+import { useGlobalContext } from '../Provider/GlobalProvider.jsx'
 import AddAddress from '../components/AddAddress'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'

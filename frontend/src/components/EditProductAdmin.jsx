@@ -103,7 +103,7 @@ const EditProductAdmin = ({ close,data : propsData, fetchProductData }) => {
         });
       }
     } catch (err) {
-      console.log(err);
+      console.log(err.message);
     }
   };
   return (

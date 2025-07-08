@@ -12,7 +12,6 @@ const CategoryWiseProductDisplay = ({ id, name }) => {
   const [loading, setLoading] = useState(false);
   const loadingCard = new Array(12).fill(null);
   const subCategory = useSelector((state) => state.product.allSubCategory)
-  const user = useSelector((state) => state.user);
   const containerRef = useRef();
   const fetchCategoryWiseProduct = async () => {
     try {
@@ -57,7 +56,7 @@ const CategoryWiseProductDisplay = ({ id, name }) => {
 
   useEffect(() => {
     fetchCategoryWiseProduct();
-  }, [user]);
+  }, []);
   return (
     <section>
       <div className=" container mx-auto p-4 flex justify-between items-center gap-4">

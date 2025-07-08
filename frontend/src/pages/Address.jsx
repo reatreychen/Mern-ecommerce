@@ -7,7 +7,7 @@ import EditAddressDetails from '../components/EditAddressDetails';
 import Axios from '../utils/Axios';
 import SummaryApi from '../common/SummaryApi.js';
 import toast from 'react-hot-toast';
-import { useGlobalContext } from '../provider/GlobalProvider.jsx';
+import { useGlobalContext } from '../Provider/GlobalProvider.jsx';
 
 const Address = () => {
   const addressList = useSelector(state => state.address.address)
