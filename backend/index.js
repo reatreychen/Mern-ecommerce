@@ -29,9 +29,6 @@ app.use(helmet({
 // routers
 app.use('/api' , Router)
 
-connectDB(()=>{
-    console.log("db connection")
-})
 const PORT = 8080 || process.env.PORT ;
 app.get("/",(req,res)=>{
     ///server to client
@@ -39,6 +36,8 @@ app.get("/",(req,res)=>{
         message : "Server is running " + PORT
     })
 })
-app.listen(PORT, () => {
-    console.log("Server running on port " + PORT);
-});
+connectDB().then(()=>{
+    app.listen(PORT,()=>{
+        console.log("Server is running",PORT)
+    })
+})
