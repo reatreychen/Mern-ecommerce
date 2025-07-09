@@ -32,13 +32,13 @@ app.use('/api' , Router)
 connectDB(()=>{
     console.log("db connection")
 })
-const port = 3001;
-app.get("/",(request,response)=>{
+const PORT = 8080 || process.env.PORT ;
+app.get("/",(req,res)=>{
     ///server to client
-    response.json({
-        message : "Server is running " + port
+    res.json({
+        message : "Server is running " + PORT
     })
 })
-app.listen(port, () => {
-    console.log("Server running on port " + port);
+app.listen(PORT, () => {
+    console.log("Server running on port " + PORT);
 });
