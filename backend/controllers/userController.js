@@ -100,7 +100,7 @@ exports.loginController = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
+     return res.status(500).json({
       message: error.message,
       error: error.message,
     });

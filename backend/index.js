@@ -31,7 +31,6 @@ app.use('/api' , Router)
 
 const PORT = 8080 || process.env.PORT ;
 app.get("/",(req,res)=>{
-    ///server to client
     res.json({
         message : "Server is running " + PORT
     })
