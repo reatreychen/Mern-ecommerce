@@ -7,8 +7,14 @@ const dotenv = require('dotenv');
 const helmet = require('helmet')
 const morgen = require( 'morgan');
 const connectDB = require('./config/connectDB')
-const Router = require("./routes/api")
-
+const userRouter = require("./routes/userApi")
+const categoryRouter = require("./routes/categoryApi")
+const subCategoryRouter = require("./routes/subCategoryApi")
+const productRouter = require("./routes/productApi")
+const cartRouter = require("./routes/cartApi")
+const addressRouter = require("./routes/adressApi")
+const orderRouter = require("./routes/orderApi")
+const uploadRouter = require("./routes/uploadApi")
 dotenv.config()
 
 app.use(cors({
@@ -34,7 +40,14 @@ app.get("/",(req,res)=>{
 })
 
 // routers
-app.use('/api' , Router)
+app.use('/api/user' , userRouter)
+app.use('/api/category' , categoryRouter)
+app.use('/api/product' , productRouter)
+app.use('/api/cart' , cartRouter)
+app.use('/api/address' , addressRouter)
+app.use('/api/order' , orderRouter)
+app.use('/api/sub-category' , subCategoryRouter)
+app.use('/api/upload' , uploadRouter)
 
 
 connectDB().then(()=>{
