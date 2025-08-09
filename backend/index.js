@@ -20,6 +20,7 @@ const uploadRouter = require("./routes/uploadApi")
 dotenv.config()
 
 // CORS: allow multiple frontends (comma-separated in FRONTEND_URLS) and local dev
+const allowAllCors = String(process.env.ALLOW_ALL_CORS || '').toLowerCase() === 'true'
 const rawAllowed = (process.env.FRONTEND_URLS || process.env.FRONTEND_URL || "").split(",")
   .map((s) => s.trim().replace(/\/$/, ""))
   .filter(Boolean)
@@ -33,6 +34,7 @@ const corsOptions = {
   origin: function (origin, callback) {
     if (!origin) return callback(null, true) // allow server-to-server and tools
     const cleanOrigin = origin.replace(/\/$/, "")
+    if (allowAllCors) return callback(null, true)
     if (rawAllowed.includes(cleanOrigin)) return callback(null, true)
     return callback(new Error("Not allowed by CORS"))
   },
