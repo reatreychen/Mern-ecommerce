@@ -15,7 +15,8 @@ userRouter.put(
   userController.uploadAvatarController
 );
 userRouter.put("/update-user-details", auth, userController.updateUserDetails);
-userRouter.post("/refresh-token", auth, userController.refreshTokenController);
+// refresh-token should not require access token middleware
+userRouter.post("/refresh-token", userController.refreshTokenController);
 userRouter.get("/user-detail", auth, userController.getUserDetailsController);
 
 module.exports = userRouter;

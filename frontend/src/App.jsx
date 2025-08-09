@@ -26,6 +26,18 @@ const App = () => {
     }
   };
 
+  // On initial load, if Google redirected with tokens in query, store them and clean the URL
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const at = params.get('access_token')
+    const rt = params.get('refresh_token')
+    if (at && rt) {
+      localStorage.setItem('access_token', at)
+      localStorage.setItem('refresh_token', rt)
+      window.history.replaceState({}, document.title, window.location.pathname)
+    }
+  }, [])
+
   const fetchCategory = async () => {
     try {
       dispatch(setLoadingCategory(true));

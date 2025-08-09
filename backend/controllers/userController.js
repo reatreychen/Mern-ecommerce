@@ -84,8 +84,8 @@ exports.loginController = async (req, res) => {
     const refreshToken = await generateRefreshToken(user._id);
     const cookieOptions = {
       httpOnly: true,
-      secure: true,
-      samSite: "None",
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
     };
     res.cookie("access_token", accessToken, cookieOptions);
     res.cookie("refresh_token", refreshToken, cookieOptions);
@@ -112,8 +112,8 @@ exports.logoutController = async (req, res) => {
     const userid = req.userId; // middleware
     const cookieOptions = {
       httpOnly: true,
-      secure: true,
-      samSite: "None",
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
     };
     res.clearCookie("access_token", cookieOptions);
     res.clearCookie("refresh_token", cookieOptions);
@@ -194,7 +194,7 @@ exports.updateUserDetails = async (req, res) => {
 // refresh token controller
 exports.refreshTokenController = async (req, res) => {
   try {
-    const refreshToken = req.cookies.refresh_token || req.headers.authorization.split("")[1]; // Bearer token
+    const refreshToken = req.cookies.refresh_token || (req.headers.authorization ? req.headers.authorization.split(" ")[1] : undefined); // Bearer token
     if (!refreshToken) {
       return res.status(401).json({
         message: "Refresh token is missing",
@@ -212,12 +212,12 @@ exports.refreshTokenController = async (req, res) => {
       });
     }
     console.log ("verifyToken: " , verifyToken);
-    const userId = verifyToken._id
+    const userId = verifyToken.id
     const newAccessToken = await generatedAccessToken(userId)
     const cookieOptions = {
       httpOnly: true,
-      secure: true,
-      samSite: "None",
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
     };
     res.cookie("access_token", newAccessToken, cookieOptions);
     return res.json({

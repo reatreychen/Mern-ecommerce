@@ -7,6 +7,8 @@ const dotenv = require('dotenv');
 const helmet = require('helmet')
 const morgen = require( 'morgan');
 const connectDB = require('./config/connectDB')
+const passport = require('./config/passport')
+const passportGoogleApi = require('./routes/passportGoogleApi')
 const userRouter = require("./routes/userApi")
 const categoryRouter = require("./routes/categoryApi")
 const subCategoryRouter = require("./routes/subCategoryApi")
@@ -30,6 +32,7 @@ app.use(morgen());
 app.use(helmet({
     crossOriginResourcePolicy: false
 }))
+app.use(passport.initialize())
 
 
 const PORT = 8080 || process.env.PORT ;
@@ -41,6 +44,10 @@ app.get("/",(req,res)=>{
 
 // routers
 app.use('/api/user' , userRouter)
+app.use('/api/passport', passportGoogleApi)
+// Also mount at root so http://localhost:8080/google/callback works
+app.use('/', passportGoogleApi)
+// Keep Google routes under /api/passport only
 app.use('/api/category' , categoryRouter)
 app.use('/api/product' , productRouter)
 app.use('/api/cart' , cartRouter)

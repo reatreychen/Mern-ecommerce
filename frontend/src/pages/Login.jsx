@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
 import Axios from '../utils/Axios'
+import { baseURL } from '../common/SummaryApi'
 import SummaryApi from '../common/SummaryApi'
 import toast from 'react-hot-toast'
 import { useDispatch } from 'react-redux'
@@ -36,8 +37,10 @@ const Login = () => {
             })
             if(response.data.success){
                 toast.success(response.data.message)
-                localStorage.setItem("access_token" , response.data.access_token)
-                localStorage.setItem("refresh_token" , response.data.refresh_token)
+                const at = response?.data?.data?.access_token
+                const rt = response?.data?.data?.refresh_token
+                if (at) localStorage.setItem("access_token" , at)
+                if (rt) localStorage.setItem("refresh_token" , rt)
                 setData({
                     email: "",
                     password: "",
@@ -46,6 +49,23 @@ const Login = () => {
                 dispatch(setUserDetails(userDetails.data))
                 navigate("/")
             }
+  // If redirected back from Google with tokens in query, store them and fetch user
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const at = params.get('access_token')
+    const rt = params.get('refresh_token')
+    if (at && rt) {
+      localStorage.setItem('access_token', at)
+      localStorage.setItem('refresh_token', rt)
+      ;(async () => {
+        const userDetails = await fetchUserDetail()
+        if (userDetails?.data) {
+          dispatch(setUserDetails(userDetails.data))
+          navigate('/')
+        }
+      })()
+    }
+  }, [])
             if(response.error){
                 toast.error(response.error.message)
             }
@@ -92,6 +112,16 @@ const Login = () => {
                 </div>
                 <button className=' bg-green-800 py-2 rounded hover:bg-green-700 text-xl font-semibold text-white hover:text-primary-100'>Login</button>
             </form>
+            {/* google login */}
+            <div className='py-4'>
+                <a
+                  href={`${baseURL}/api/passport/auth/google`}
+                  className='w-full inline-flex items-center justify-center gap-2 border border-gray-300 rounded py-2 hover:bg-gray-50'
+                >
+                  <img src='https://developers.google.com/identity/images/g-logo.png' alt='Google' className='w-5 h-5'/>
+                  <span className='font-semibold'>Continue with Google</span>
+                </a>
+            </div>
             <p>
                 Dont't have account? 
                 <Link to={'/register'} className=' font-semibold text-green-700 hover:text-green-800 '>
