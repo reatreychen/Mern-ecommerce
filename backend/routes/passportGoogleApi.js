@@ -33,7 +33,13 @@ passportGoogleApi.get(
       res.cookie("access_token", accessToken, cookieOptions);
       res.cookie("refresh_token", refreshToken, cookieOptions);
 
-      const redirectUrl = `${process.env.FRONTEND_URL}/?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
+      const allowed = (process.env.FRONTEND_URLS || process.env.FRONTEND_URL || "")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      const primaryFrontend = allowed[0] || "http://localhost:5173";
+      const frontendBase = primaryFrontend.replace(/\/$/, "");
+      const redirectUrl = `${frontendBase}/?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
       return res.redirect(redirectUrl);
     } catch (err) {
       return res.status(500).json({ message: err.message, error: true, success: false });

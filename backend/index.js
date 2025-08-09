@@ -28,7 +28,7 @@ if (!rawAllowed.length) {
   rawAllowed.push("http://localhost:5173")
 }
 
-app.use(cors({
+const corsOptions = {
   credentials: true,
   origin: function (origin, callback) {
     if (!origin) return callback(null, true) // allow server-to-server and tools
@@ -36,7 +36,18 @@ app.use(cors({
     if (rawAllowed.includes(cleanOrigin)) return callback(null, true)
     return callback(new Error("Not allowed by CORS"))
   },
-}))
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "Accept",
+    "X-Requested-With",
+  ],
+  optionsSuccessStatus: 200,
+}
+
+app.use(cors(corsOptions))
+app.options('*', cors(corsOptions))
 
 // middleware
 app.use(express.json());
