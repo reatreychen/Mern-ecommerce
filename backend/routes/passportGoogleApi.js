@@ -1,14 +1,21 @@
+// Google OAuth routes
+// - GET /auth/google: Kick off OAuth flow
+// - GET /google/callback: Handle Google's callback, set JWT cookies, then redirect to frontend
 const express = require("express");
 const passport = require("passport");
 const passportGoogleApi = express.Router();
 const generatedAccessToken = require("../utils/generatedAccessToken");
 const generateRefreshToken = require("../utils/generatedRefreshToken");
 
+// Step 1: Redirect user to Google to consent for profile and email
 passportGoogleApi.get(
   "/auth/google",
   passport.authenticate("google", { scope: ["profile", "email"], session: false })
 );
 
+// Step 2: Google redirects here after consent
+// On success: issue JWTs, set as httpOnly cookies, and redirect to the frontend
+// On failure: redirect to a JSON error endpoint
 passportGoogleApi.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/api/passport/auth/google/failure", session: false }),
@@ -20,8 +27,8 @@ passportGoogleApi.get(
 
       const cookieOptions = {
         httpOnly: true,
-        secure: true,
-        sameSite: "None",
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
       };
       res.cookie("access_token", accessToken, cookieOptions);
       res.cookie("refresh_token", refreshToken, cookieOptions);
@@ -34,6 +41,7 @@ passportGoogleApi.get(
   }
 );
 
+// Failure endpoint used by passport failureRedirect
 passportGoogleApi.get("/auth/google/failure", (_req, res) => {
   res.status(401).json({ message: "Google authentication failed", error: true, success: false });
 });

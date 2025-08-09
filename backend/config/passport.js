@@ -1,10 +1,13 @@
+// Passport Google OAuth 2.0 configuration
+// Expects env vars:
+// - GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET: from Google Cloud Console
+// - BACKEND_URL: base URL of this server (e.g., http://localhost:8080)
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const bcryptjs = require("bcryptjs");
 const UserModel = require("../models/userModels");
 
 // Configure Google OAuth 2.0 strategy
-// Requires env: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BACKEND_URL
 const rawBackendBaseUrl = process.env.BACKEND_URL || 'http://localhost:8080'
 const backendBaseUrl = rawBackendBaseUrl.replace(/\/$/, '') // strip trailing slash
 passport.use(
@@ -12,8 +15,8 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      // Match Google Console Authorized redirect URI, here we use root: /google/callback
-      // Ensure the same exact value exists in Google console
+      // Match Google Console Authorized redirect URI
+      // Ensure this exact URL is in Google console: <BACKEND_URL>/google/callback
       callbackURL: `${backendBaseUrl}/google/callback`,
     },
     async (_accessToken, _refreshToken, profile, done) => {
@@ -47,9 +50,7 @@ passport.use(
     }
   )
 );
-
-// No session serialization needed since we'll use JWTs and session: false
-
+// No session serialization needed since we use JWTs with session: false
 module.exports = passport;
 
 

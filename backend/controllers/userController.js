@@ -50,7 +50,7 @@ exports.loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      res.status(400).json({
+      return res.status(400).json({
         message: "Please provide email and password",
         error: true,
         success: false,
@@ -58,7 +58,7 @@ exports.loginController = async (req, res) => {
     }
     const user = await UserModel.findOne({ email });
     if (!user) {
-      res.status(404).json({
+      return res.status(404).json({
         message: "User not found",
         error: true,
         success: false,
@@ -74,7 +74,7 @@ exports.loginController = async (req, res) => {
     }
     const checkPassword = await bcryptjs.compare(password, user.password);
     if (!checkPassword) {
-      res.status(401).json({
+      return res.status(401).json({
         message: "Invalid password",
         error: true,
         success: false,

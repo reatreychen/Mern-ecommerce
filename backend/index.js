@@ -19,9 +19,23 @@ const orderRouter = require("./routes/orderApi")
 const uploadRouter = require("./routes/uploadApi")
 dotenv.config()
 
+// CORS: allow multiple frontends (comma-separated in FRONTEND_URLS) and local dev
+const rawAllowed = (process.env.FRONTEND_URLS || process.env.FRONTEND_URL || "").split(",")
+  .map((s) => s.trim().replace(/\/$/, ""))
+  .filter(Boolean)
+// Always include localhost dev by default
+if (!rawAllowed.length) {
+  rawAllowed.push("http://localhost:5173")
+}
+
 app.use(cors({
-    credentials : true,
-    origin : process.env.FRONTEND_URL
+  credentials: true,
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true) // allow server-to-server and tools
+    const cleanOrigin = origin.replace(/\/$/, "")
+    if (rawAllowed.includes(cleanOrigin)) return callback(null, true)
+    return callback(new Error("Not allowed by CORS"))
+  },
 }))
 
 // middleware
@@ -35,7 +49,7 @@ app.use(helmet({
 app.use(passport.initialize())
 
 
-const PORT = 8080 || process.env.PORT ;
+const PORT = process.env.PORT || 8080;
 app.get("/",(req,res)=>{
     res.json({
         message : "Server is running " + PORT
