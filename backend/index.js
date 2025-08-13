@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const helmet = require('helmet')
 const morgen = require( 'morgan');
+const rateLimit = require('express-rate-limit');
+const compression = require('compression');
 const connectDB = require('./config/connectDB')
 const passport = require('./config/passport')
 const passportGoogleApi = require('./routes/passportGoogleApi')
@@ -18,6 +20,21 @@ const addressRouter = require("./routes/adressApi")
 const orderRouter = require("./routes/orderApi")
 const uploadRouter = require("./routes/uploadApi")
 dotenv.config()
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Apply rate limiting to all routes
+app.use(limiter);
+
+// Enable compression
+app.use(compression());
 
 // CORS: allow multiple frontends (comma-separated in FRONTEND_URLS) and local dev
 const allowAllCors = String(process.env.ALLOW_ALL_CORS || '').toLowerCase() === 'true'
