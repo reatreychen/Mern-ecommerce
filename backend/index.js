@@ -79,7 +79,7 @@ app.use(helmet({
 app.use(passport.initialize())
 
 
-const PORT = process.env.PORT || 8080;
+const PORT = 8080;
 app.get("/",(req,res)=>{
     res.json({
         message : "Server is running " + PORT
