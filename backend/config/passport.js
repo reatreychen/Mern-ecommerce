@@ -8,8 +8,10 @@ const bcryptjs = require("bcryptjs");
 const UserModel = require("../models/userModels");
 
 // Configure Google OAuth 2.0 strategy
-const rawBackendBaseUrl = process.env.BACKEND_URL || 'http://localhost:8080'
+const rawBackendBaseUrl = process.env.BACKEND_URL || 'http://localhost:8000'
 const backendBaseUrl = rawBackendBaseUrl.replace(/\/$/, '') // strip trailing slash
+// Helpful debug to verify the redirect URI exactly
+console.log("[OAuth] Google callback URL:", `${backendBaseUrl}/google/callback`)
 passport.use(
   new GoogleStrategy(
     {

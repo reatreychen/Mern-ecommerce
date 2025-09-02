@@ -30,8 +30,18 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 
-// Apply rate limiting to all routes
-app.use(limiter);
+// Apply rate limiting to most routes, but skip OAuth to avoid breaking flows
+app.use((req, res, next) => {
+  const path = req.path || ''
+  if (
+    path.startsWith('/api/passport') ||
+    path === '/google/callback' ||
+    path.startsWith('/.well-known')
+  ) {
+    return next()
+  }
+  return limiter(req, res, next)
+});
 
 // Enable compression
 app.use(compression());
