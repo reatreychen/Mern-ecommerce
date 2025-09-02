@@ -7,12 +7,15 @@ const passportGoogleApi = express.Router();
 const generatedAccessToken = require("../utils/generatedAccessToken");
 const generateRefreshToken = require("../utils/generatedRefreshToken");
 
-// Debug endpoint to inspect the callback URL currently configured
-passportGoogleApi.get("/auth/google/debug-callback", (_req, res) => {
-  const rawBackendBaseUrl = process.env.BACKEND_URL || 'http://localhost:8000'
-  const backendBaseUrl = rawBackendBaseUrl.replace(/\/$/, '')
-  const callbackUrl = `${backendBaseUrl}/google/callback`
-  return res.json({ callbackUrl, BACKEND_URL: rawBackendBaseUrl })
+// Debug endpoints to inspect the callback URL Passport will use
+passportGoogleApi.get("/auth/google/debug-callback", (req, res) => {
+  const host = req.get('host')
+  const proto = (req.headers['x-forwarded-proto'] || req.protocol || 'http').toString().split(',')[0]
+  const absolute = `${proto}://${host}/google/callback`
+  return res.json({
+    computedFromRequest: absolute,
+    note: "Use this exact value in Google Console → Authorized redirect URIs",
+  })
 });
 
 // Step 1: Redirect user to Google to consent for profile and email
