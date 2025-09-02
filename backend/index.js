@@ -21,6 +21,9 @@ const orderRouter = require("./routes/orderApi")
 const uploadRouter = require("./routes/uploadApi")
 dotenv.config()
 
+// Trust reverse proxy (Render/Heroku/NGINX) so req.protocol and secure cookies work
+app.set('trust proxy', 1)
+
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes

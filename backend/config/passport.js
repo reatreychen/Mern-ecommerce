@@ -17,6 +17,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      proxy: true, // respect X-Forwarded-* to build https redirect behind proxies
       // Relative callback lets Google use the current host automatically
       // Google Console Authorized redirect URI must be set to your full URL
       callbackURL: `/google/callback`,
