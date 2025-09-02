@@ -11,15 +11,15 @@ const UserModel = require("../models/userModels");
 const rawBackendBaseUrl = process.env.BACKEND_URL || 'http://localhost:8000'
 const backendBaseUrl = rawBackendBaseUrl.replace(/\/$/, '') // strip trailing slash
 // Helpful debug to verify the redirect URI exactly
-console.log("[OAuth] Google callback URL:", `${backendBaseUrl}/google/callback`)
+console.log("[OAuth] Google callback URL:", `/google/callback`)
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      // Match Google Console Authorized redirect URI
-      // Ensure this exact URL is in Google console: <BACKEND_URL>/google/callback
-      callbackURL: `${backendBaseUrl}/google/callback`,
+      // Relative callback lets Google use the current host automatically
+      // Google Console Authorized redirect URI must be set to your full URL
+      callbackURL: `/google/callback`,
     },
     async (_accessToken, _refreshToken, profile, done) => {
       try {
